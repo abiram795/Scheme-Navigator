@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Chatbot - Government Scheme Navigator AI</title>
+  <meta name="description" content="Chat with Government Scheme Navigator AI to discover scholarships, farming subsidies, pension options, and other government benefits in English and Tamil.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/chatbot.css">
+</head>
+<body class="light-theme">
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="home.html" class="nav-logo">
+        <img src="assets/logo.png" alt="Gov Scheme AI Logo" id="logo-img">
+        <span class="logo-text">Scheme<span>Navigator</span></span>
+      </a>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle Menu">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <nav class="nav-menu" id="nav-menu">
+        <a href="home.html" class="nav-link">Home</a>
+        <a href="schemes.html" class="nav-link">Schemes</a>
+        <a href="chatbot.html" class="nav-link active">Ask AI Chatbot</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="#" id="nav-logout" class="nav-link"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+        <div id="google_translate_element" style="display:inline-block;"></div>
+        <button id="theme-toggle" class="theme-btn" aria-label="Toggle Theme">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Chatbot Container -->
+  <main class="chatbot-page-container">
+    <div class="chatbot-grid">
+      
+      <!-- User Profile Sidebar (Smart Recommendation System) -->
+      <aside class="profile-sidebar glass-card">
+        <div class="sidebar-header">
+          <h3><i class="fa-solid fa-user-circle"></i> Personal Profile</h3>
+          <p>Complete to get personalized recommendations automatically</p>
+        </div>
+        <form id="profile-form" class="profile-form">
+          <div class="form-group">
+            <label for="profile-name">Name</label>
+            <input type="text" id="profile-name" placeholder="Enter your name" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="profile-age">Age</label>
+            <input type="number" id="profile-age" min="1" max="120" placeholder="e.g. 19" required>
+          </div>
+
+          <div class="form-group">
+            <label for="profile-gender">Gender</label>
+            <select id="profile-gender" required>
+              <option value="" disabled selected>Select Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Transgender">Transgender</option>
+              <option value="Rather Not Say">Rather Not Say</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="profile-state">State</label>
+            <select id="profile-state" required>
+              <option value="" disabled selected>Select State</option>
+              <option value="Central">All India / Central</option>
+              <option value="Tamil Nadu">Tamil Nadu</option>
+              <option value="Kerala">Kerala</option>
+              <option value="Karnataka">Karnataka</option>
+              <option value="Andhra Pradesh">Andhra Pradesh</option>
+              <option value="Other">Other State</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="profile-occupation">Occupation</label>
+            <select id="profile-occupation" required>
+              <option value="" disabled selected>Select Occupation</option>
+              <option value="Student">Student</option>
+              <option value="Farmer">Farmer</option>
+              <option value="Self-Employed">Self-Employed / Startup</option>
+              <option value="Unemployed">Unemployed</option>
+              <option value="Retired">Retired / Senior Citizen</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="profile-education">Education Level</label>
+            <select id="profile-education" required>
+              <option value="" disabled selected>Select Education</option>
+              <option value="Under Class 10">Under Class 10</option>
+              <option value="Class 12">Class 12</option>
+              <option value="ITI / Vocational">ITI / Vocational</option>
+              <option value="Diploma">Diploma</option>
+              <option value="Engineering Graduate">Engineering Graduate</option>
+              <option value="Graduate (Other)">Graduate (Other)</option>
+              <option value="Postgraduate">Postgraduate</option>
+            </select>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block" id="btn-save-profile">
+            <i class="fa-solid fa-floppy-disk"></i> Get Custom Recommendations
+          </button>
+        </form>
+        
+        <div id="profile-status" class="profile-status-message hidden">
+          <i class="fa-solid fa-circle-check"></i> Profile Saved! Recommended schemes are loaded in the chat.
+          <button type="button" id="clear-profile-btn" class="btn-text">Clear Profile</button>
+        </div>
+      </aside>
+
+      <!-- Chat Window -->
+      <section class="chat-window glass-card">
+        <!-- Chat Header -->
+        <div class="chat-header">
+          <div class="chat-agent-info">
+            <div class="agent-avatar"><i class="fa-solid fa-robot"></i></div>
+            <div>
+              <h3>Gov Scheme AI Assistant</h3>
+              <p><span class="online-indicator"></span> Online | Supports English & Tamil</p>
+            </div>
+          </div>
+          <button id="clear-chat" class="btn-icon-text" title="Clear Chat History">
+            <i class="fa-solid fa-trash-can"></i> <span>Reset Chat</span>
+          </button>
+        </div>
+
+        <!-- Messages Container -->
+        <div class="chat-messages" id="chat-messages">
+          <div class="message bot-message">
+            <div class="message-bubble">
+              <p>Hello! I am Government Scheme Navigator AI. I can help you search and understand official government welfare schemes, including scholarships, agricultural support, startups, and pension plans in both English and Tamil.</p>
+              <p>To get started, feel free to fill out the <strong>Personal Profile</strong> on the left, or ask a question directly below!</p>
+            </div>
+            <span class="message-time">Just now</span>
+          </div>
+        </div>
+
+        <!-- Typing indicator -->
+        <div class="typing-indicator-container hidden" id="typing-indicator">
+          <div class="typing-bubble">
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+          </div>
+          <span class="indicator-text">AI is reading database and thinking...</span>
+        </div>
+
+        <!-- Suggestion Chips -->
+        <div class="suggestion-chips">
+          <button class="chip">Scholarships for engineering</button>
+          <button class="chip">Schemes for farmers in Tamil Nadu</button>
+          <button class="chip">Women entrepreneur funding</button>
+          <button class="chip">Pensions for senior citizens</button>
+        </div>
+
+        <!-- Chat Input Form -->
+        <form class="chat-input-area" id="chat-form">
+          <input type="text" id="chat-input" placeholder="Type your question in English or Tamil (e.g. 'Scholarship for college' or 'விவசாயிகள் திட்டம்')..." autocomplete="off" required>
+          <button type="submit" class="btn-send" aria-label="Send Message">
+            <i class="fa-solid fa-paper-plane"></i>
+          </button>
+        </form>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Scripts -->
+  <script src="js/app.js"></script>
+  <!-- Load Supabase SDK from CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/gemini.js"></script>
+  <script src="js/chatbot.js"></script>
+  <!-- Google Translate -->
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'en,ta', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
+    }
+  </script>
+  <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>

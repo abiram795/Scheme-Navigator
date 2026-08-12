@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Government Scheme Navigator AI</title>
+  <meta name="description" content="Manage government scheme records. Add, edit, delete, and view all items in the database.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="light-theme">
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="home.html" class="nav-logo">
+        <img src="assets/logo.png" alt="Gov Scheme AI Logo" id="logo-img">
+        <span class="logo-text">Scheme<span>Navigator</span></span>
+      </a>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle Menu">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <nav class="nav-menu" id="nav-menu">
+        <button id="admin-logout-btn" class="btn btn-secondary btn-sm" style="margin-right: 15px; display: none;"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</button>
+        <div id="google_translate_element" style="display:inline-block;"></div>
+        <button id="theme-toggle" class="theme-btn" aria-label="Toggle Theme">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Admin Login Overlay -->
+  <div id="admin-login-container" class="section-container" style="display: flex; justify-content: center; align-items: center; min-height: 70vh;">
+    <div class="glass-card" style="padding: 2rem; width: 100%; max-width: 400px; text-align: center;">
+      <h2 style="margin-bottom: 1.5rem;"><i class="fa-solid fa-lock" style="color: var(--primary);"></i> Admin Login</h2>
+      <form id="admin-login-form">
+        <div class="form-group" style="text-align: left; margin-bottom: 1rem;">
+          <label for="admin-email">Email ID</label>
+          <input type="email" id="admin-email" required placeholder="admin@example.com" style="width: 100%;">
+        </div>
+        <div class="form-group" style="text-align: left; margin-bottom: 1.5rem;">
+          <label for="admin-password">Password</label>
+          <input type="password" id="admin-password" required placeholder="Enter password" style="width: 100%;">
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;" id="btn-login">Login</button>
+      </form>
+      <div id="login-error" style="color: var(--error); margin-top: 1rem; font-size: 0.9rem; display: none;">Invalid email or password</div>
+    </div>
+  </div>
+
+  <!-- Admin Panel Container -->
+  <main id="admin-main-content" class="admin-container section-container" style="display: none;">
+    <div class="admin-header-row">
+      <div>
+        <h1>Admin Control Dashboard</h1>
+        <p>Direct Supabase database operations. Manage schemes and view registered users.</p>
+      </div>
+      <button class="btn btn-primary" id="btn-open-add-modal" style="display: none;">
+        <i class="fa-solid fa-plus"></i> Add New Scheme
+      </button>
+    </div>
+
+    <!-- TABS -->
+    <div class="admin-tabs" style="display: flex; gap: 10px; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">
+      <button class="admin-tab-btn active" id="tab-btn-schemes" style="background: none; border: none; font-family: inherit; font-size: 1.1rem; font-weight: 600; color: var(--accent); cursor: pointer; padding: 5px 10px; border-bottom: 2px solid var(--accent);">Manage Schemes</button>
+      <button class="admin-tab-btn" id="tab-btn-users" style="background: none; border: none; font-family: inherit; font-size: 1.1rem; font-weight: 600; color: var(--text-color); cursor: pointer; padding: 5px 10px;">Registered Users</button>
+      <button class="admin-tab-btn" id="tab-btn-ai" style="background: none; border: none; font-family: inherit; font-size: 1.1rem; font-weight: 600; color: var(--text-color); cursor: pointer; padding: 5px 10px;">AI Settings</button>
+    </div>
+
+    <!-- SCHEMES TAB CONTENT -->
+    <div id="tab-content-schemes">
+
+    <!-- Filter Control Card -->
+    <section class="filter-controls-card glass-card">
+      <div class="filters-row">
+        <div class="search-input-wrapper flex-grow">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="admin-search-input" placeholder="Search schemes by name...">
+        </div>
+
+        <div class="filter-group">
+          <select id="admin-filter-category">
+            <option value="All">All Categories</option>
+            <option value="Student">Student</option>
+            <option value="Farmer">Farmer</option>
+            <option value="Women">Women</option>
+            <option value="Senior Citizen">Senior Citizen</option>
+            <option value="Startup">Startup</option>
+            <option value="Employment">Employment</option>
+            <option value="Education">Education</option>
+            <option value="Health">Health</option>
+            <option value="Disability Support">Disability Support</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <select id="admin-filter-state">
+            <option value="All">All Regions</option>
+            <option value="Central">Central (National)</option>
+            <option value="Tamil Nadu">Tamil Nadu</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <!-- Alert Message Banner -->
+    <div id="admin-alert" class="admin-alert hidden"></div>
+
+    <!-- Schemes Table Card -->
+    <div class="admin-table-wrapper glass-card">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Scheme Name</th>
+            <th>Category</th>
+            <th>State</th>
+            <th>Language</th>
+            <th>Source</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="admin-table-body">
+          <tr>
+            <td colspan="7" class="text-center">Loading database records...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    </div> <!-- END SCHEMES TAB -->
+
+    <!-- USERS TAB CONTENT -->
+    <div id="tab-content-users" style="display: none;">
+      <div class="admin-table-wrapper glass-card">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Age</th>
+              <th>Gender</th>
+              <th>State</th>
+              <th>Education</th>
+              <th>Occupation</th>
+            </tr>
+          </thead>
+          <tbody id="admin-users-table-body">
+            <tr>
+              <td colspan="8" class="text-center">Loading registered users...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div> <!-- END USERS TAB -->
+
+    <!-- AI SETTINGS TAB CONTENT -->
+    <div id="tab-content-ai" style="display: none;">
+      <section class="filter-controls-card glass-card" style="max-width: 600px; margin: 0 auto; padding: 2rem;">
+        <h2 style="margin-bottom: 1.5rem; color: var(--accent);">AI Chatbot Configuration</h2>
+        <form id="ai-settings-form">
+          <div class="form-group" style="margin-bottom: 1.5rem; text-align: left;">
+            <label for="ai-api-key" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Gemini API Key</label>
+            <input type="password" id="ai-api-key" placeholder="Enter your Google Gemini API Key" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.05); color: var(--text-color);">
+            <small style="color: var(--text-muted); display: block; margin-top: 5px;">Leave blank to use the previously saved key.</small>
+          </div>
+          <div class="form-group" style="margin-bottom: 1.5rem; text-align: left;">
+            <label for="ai-gemini-model" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Gemini Model</label>
+            <select id="ai-gemini-model" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.05); color: var(--text-color);">
+              <option value="gemini-flash-latest">Gemini Flash Latest (Fast)</option>
+              <option value="gemini-pro-latest">Gemini Pro Latest (Advanced)</option>
+              <option value="gemini-3.5-flash">Gemini 3.5 Flash</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom: 1.5rem; text-align: left;">
+            <label for="ai-response-length" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Response Length</label>
+            <select id="ai-response-length" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.05); color: var(--text-color);">
+              <option value="Short">Short & Concise</option>
+              <option value="Medium">Medium</option>
+              <option value="Detailed">Detailed & Explanatory</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom: 1.5rem; text-align: left;">
+            <label for="ai-tamil-mode" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Tamil Response Mode Instruction</label>
+            <textarea id="ai-tamil-mode" rows="3" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.05); color: var(--text-color);" placeholder="e.g. Translate to formal Tamil"></textarea>
+          </div>
+          <div class="form-group" style="margin-bottom: 1.5rem; text-align: left;">
+            <label for="ai-english-mode" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">English Response Mode Instruction</label>
+            <textarea id="ai-english-mode" rows="3" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.05); color: var(--text-color);" placeholder="e.g. Use simple english"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" id="btn-save-ai-settings" style="width: 100%; padding: 12px; font-size: 1.1rem;">Save AI Settings</button>
+        </form>
+      </section>
+    </div> <!-- END AI SETTINGS TAB -->
+  </main>
+
+  <!-- Add/Edit Modal Overlay -->
+  <div class="modal-overlay hidden" id="scheme-modal">
+    <div class="modal-content glass-card">
+      <div class="modal-header">
+        <h3 id="modal-title">Add Government Scheme</h3>
+        <button class="modal-close-btn" id="btn-close-modal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      
+      <form id="scheme-crud-form" class="scheme-crud-form">
+        <input type="hidden" id="form-scheme-id">
+        
+        <div class="form-row">
+          <div class="form-group flex-2">
+            <label for="form-name">Scheme Name *</label>
+            <input type="text" id="form-name" required placeholder="e.g. PM Kisan Samman Nidhi">
+          </div>
+          <div class="form-group">
+            <label for="form-category">Category *</label>
+            <select id="form-category" required>
+              <option value="" disabled selected>Select Category</option>
+              <option value="Student">Student</option>
+              <option value="Farmer">Farmer</option>
+              <option value="Women">Women</option>
+              <option value="Senior Citizen">Senior Citizen</option>
+              <option value="Startup">Startup</option>
+              <option value="Employment">Employment</option>
+              <option value="Education">Education</option>
+              <option value="Health">Health</option>
+              <option value="Disability Support">Disability Support</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="form-desc">Scheme Description</label>
+          <textarea id="form-desc" rows="3" placeholder="Provide a concise summary of what this scheme is about..."></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="form-eligibility">Eligibility Criteria</label>
+            <textarea id="form-eligibility" rows="2" placeholder="Who qualifies for this scheme? (Income, age, state limits)"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="form-benefits">Benefits Provided</label>
+            <textarea id="form-benefits" rows="2" placeholder="Cash assistance, subsidies, laptops, pensions..."></textarea>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="form-process">Application Process</label>
+          <textarea id="form-process" rows="2" placeholder="Step by step application procedure (Online portal, offices to visit)"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="form-documents">Required Documents</label>
+          <textarea id="form-documents" rows="2" placeholder="List the documents needed (e.g. Aadhar, Income Certificate, etc.)"></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="form-link">Official Scheme Link</label>
+            <input type="url" id="form-link" placeholder="https://...">
+          </div>
+          <div class="form-group">
+            <label for="form-state">State / Central *</label>
+            <select id="form-state" required>
+              <option value="" disabled selected>Select Scope</option>
+              <option value="Central">Central (National)</option>
+              <option value="Tamil Nadu">Tamil Nadu</option>
+              <option value="Kerala">Kerala</option>
+              <option value="Karnataka">Karnataka</option>
+              <option value="Andhra Pradesh">Andhra Pradesh</option>
+              <option value="Other">Other State</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="form-lang">Language *</label>
+            <select id="form-lang" required>
+              <option value="English">English</option>
+              <option value="Tamil">Tamil</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="form-source-name">Source Department/Ministry</label>
+            <input type="text" id="form-source-name" placeholder="e.g. Ministry of Agriculture">
+          </div>
+          <div class="form-group">
+            <label for="form-source-url">Source Verification URL</label>
+            <input type="url" id="form-source-url" placeholder="https://...">
+          </div>
+        </div>
+
+        <h4 style="margin-top: 1.5rem; margin-bottom: 0.5rem; color: var(--accent); border-bottom: 1px solid var(--border-color); padding-bottom: 5px;">Document Management (Uploads)</h4>
+        <p style="font-size: 0.85rem; color: var(--text-color); margin-bottom: 1rem;">Note: Automatically uploads to Supabase 'scheme-documents' bucket.</p>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="form-pdf-file">General PDF</label>
+            <input type="file" id="form-pdf-file" accept=".pdf">
+            <small id="form-pdf-existing" style="display:block; color:var(--accent); font-size: 0.8rem; margin-top: 2px;"></small>
+          </div>
+          <div class="form-group">
+            <label for="form-guidelines-file">Guidelines</label>
+            <input type="file" id="form-guidelines-file" accept=".pdf,.doc,.docx">
+            <small id="form-guidelines-existing" style="display:block; color:var(--accent); font-size: 0.8rem; margin-top: 2px;"></small>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="form-notice-file">Government Notice</label>
+            <input type="file" id="form-notice-file" accept=".pdf,.doc,.docx,.jpg,.png">
+            <small id="form-notice-existing" style="display:block; color:var(--accent); font-size: 0.8rem; margin-top: 2px;"></small>
+          </div>
+          <div class="form-group">
+            <label for="form-app-form-file">Application Form</label>
+            <input type="file" id="form-app-form-file" accept=".pdf,.doc,.docx">
+            <small id="form-app-form-existing" style="display:block; color:var(--accent); font-size: 0.8rem; margin-top: 2px;"></small>
+          </div>
+        </div>
+
+        <div class="modal-footer-buttons">
+          <button type="button" class="btn btn-secondary" id="btn-cancel-form">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btn-submit-form">Save Scheme</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/app.js"></script>
+  <!-- Load Supabase SDK from CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
+
+  <!-- Admin Panel Controller Code -->
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const searchInput = document.getElementById('admin-search-input');
+      const filterCategory = document.getElementById('admin-filter-category');
+      const filterState = document.getElementById('admin-filter-state');
+      const tableBody = document.getElementById('admin-table-body');
+      
+      const modal = document.getElementById('scheme-modal');
+      const modalTitle = document.getElementById('modal-title');
+      const crudForm = document.getElementById('scheme-crud-form');
+      const alertBanner = document.getElementById('admin-alert');
+      
+      const openModalBtn = document.getElementById('btn-open-add-modal');
+      const closeModalBtn = document.getElementById('btn-close-modal');
+      const cancelBtn = document.getElementById('btn-cancel-form');
+
+      let allSchemes = [];
+      let isEditMode = false;
+
+      // Check if Supabase client is configured
+      if (!window.supabaseClientReady) {
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="7" class="text-center" style="color:var(--accent); font-weight:600; padding:3rem 1rem;">
+              <i class="fa-solid fa-triangle-exclamation" style="font-size: 2rem; margin-bottom: 0.5rem; display:block;"></i>
+              Supabase Configuration Not Detected!
+              <p style="font-size: 0.85rem; color: var(--text); font-weight: normal; margin-top: 0.5rem;">
+                Please set up SUPABASE_URL and SUPABASE_ANON_KEY inside js/supabase.js to enable admin capabilities.
+              </p>
+            </td>
+          </tr>`;
+        openModalBtn.disabled = true;
+        return;
+      }
+
+      const loginContainer = document.getElementById('admin-login-container');
+      const mainContent = document.getElementById('admin-main-content');
+      const loginForm = document.getElementById('admin-login-form');
+      const loginError = document.getElementById('login-error');
+
+      // Check auth state
+      const adminLogoutBtn = document.getElementById('admin-logout-btn');
+      
+      const checkAuth = () => {
+        if (sessionStorage.getItem('admin_authenticated') === 'true') {
+          loginContainer.style.display = 'none';
+          mainContent.style.display = 'block';
+          adminLogoutBtn.style.display = 'inline-block';
+          return true;
+        }
+        return false;
+      };
+
+      adminLogoutBtn.addEventListener('click', () => {
+        sessionStorage.removeItem('admin_authenticated');
+        window.location.reload();
+      });
+
+      if (!checkAuth()) {
+        loginForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const email = document.getElementById('admin-email').value;
+          const password = document.getElementById('admin-password').value;
+          
+          try {
+            document.getElementById('btn-login').innerText = 'Verifying...';
+            const { data, error } = await supabase
+              .from('admins')
+              .select('id')
+              .eq('email', email)
+              .eq('password_hash', password)
+              .single();
+              
+            if (error || !data) {
+              loginError.style.display = 'block';
+              document.getElementById('btn-login').innerText = 'Login';
+            } else {
+              sessionStorage.setItem('admin_authenticated', 'true');
+              loginContainer.style.display = 'none';
+              mainContent.style.display = 'block';
+              await refreshData();
+            }
+          } catch (err) {
+            console.error(err);
+            loginError.style.display = 'block';
+            document.getElementById('btn-login').innerText = 'Login';
+          }
+        });
+      } else {
+        // Initial load if already authenticated
+        await refreshData();
+      }
+
+      // Event Listeners
+      searchInput.addEventListener('input', debounce(filterTableData, 250));
+      filterCategory.addEventListener('change', filterTableData);
+      filterState.addEventListener('change', filterTableData);
+
+      openModalBtn.addEventListener('click', () => {
+        isEditMode = false;
+        modalTitle.innerText = "Add Government Scheme";
+        crudForm.reset();
+        document.getElementById('form-scheme-id').value = '';
+        document.getElementById('form-pdf-existing').innerHTML = '';
+        document.getElementById('form-guidelines-existing').innerHTML = '';
+        document.getElementById('form-notice-existing').innerHTML = '';
+        document.getElementById('form-app-form-existing').innerHTML = '';
+        modal.classList.remove('hidden');
+      });
+
+      const closeModal = () => {
+        modal.classList.add('hidden');
+      };
+      
+      closeModalBtn.addEventListener('click', closeModal);
+      cancelBtn.addEventListener('click', closeModal);
+
+      // Helper to upload file to Supabase Storage
+      async function uploadSchemeDocument(file, prefix) {
+        if (!file) return null;
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${prefix}-${Date.now()}.${fileExt}`;
+        const filePath = `${fileName}`;
+        
+        const { error: uploadError } = await supabase.storage
+          .from('scheme-documents')
+          .upload(filePath, file, { cacheControl: '3600', upsert: false });
+          
+        if (uploadError) {
+          console.error('Upload Error:', uploadError);
+          throw new Error(`Failed to upload ${file.name}`);
+        }
+        
+        const { data } = supabase.storage.from('scheme-documents').getPublicUrl(filePath);
+        return data.publicUrl;
+      }
+
+      // Form Submission
+      crudForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const schemeId = document.getElementById('form-scheme-id').value;
+        const submitBtn = document.getElementById('btn-submit-form');
+        const originalBtnText = submitBtn.innerText;
+        
+        try {
+          submitBtn.innerText = 'Uploading...';
+          submitBtn.disabled = true;
+
+          // 1. Handle File Uploads
+          const pdfFile = document.getElementById('form-pdf-file').files[0];
+          const guidelinesFile = document.getElementById('form-guidelines-file').files[0];
+          const noticeFile = document.getElementById('form-notice-file').files[0];
+          const appFormFile = document.getElementById('form-app-form-file').files[0];
+
+          let pdfUrl, guidelinesUrl, noticeUrl, appFormUrl;
+          if (pdfFile) pdfUrl = await uploadSchemeDocument(pdfFile, 'pdf');
+          if (guidelinesFile) guidelinesUrl = await uploadSchemeDocument(guidelinesFile, 'guide');
+          if (noticeFile) noticeUrl = await uploadSchemeDocument(noticeFile, 'notice');
+          if (appFormFile) appFormUrl = await uploadSchemeDocument(appFormFile, 'appform');
+
+          submitBtn.innerText = 'Saving Scheme...';
+
+          const schemeData = {
+            scheme_name: document.getElementById('form-name').value.trim(),
+            category: document.getElementById('form-category').value,
+            description: document.getElementById('form-desc').value.trim(),
+            eligibility: document.getElementById('form-eligibility').value.trim(),
+            benefits: document.getElementById('form-benefits').value.trim(),
+            application_process: document.getElementById('form-process').value.trim(),
+            required_documents: document.getElementById('form-documents').value.trim(),
+            official_link: document.getElementById('form-link').value.trim(),
+            state: document.getElementById('form-state').value,
+            language: document.getElementById('form-lang').value,
+            source_name: document.getElementById('form-source-name').value.trim(),
+            source_url: document.getElementById('form-source-url').value.trim(),
+          };
+
+          // Append URLs only if newly uploaded
+          if (pdfUrl) schemeData.pdf_url = pdfUrl;
+          if (guidelinesUrl) schemeData.guidelines_url = guidelinesUrl;
+          if (noticeUrl) schemeData.notice_url = noticeUrl;
+          if (appFormUrl) schemeData.application_form_url = appFormUrl;
+
+          let result;
+          if (isEditMode && schemeId) {
+            // Edit Operation
+            const { data, error } = await supabase
+              .from('schemes')
+              .update(schemeData)
+              .eq('id', schemeId)
+              .select();
+
+            if (error) throw error;
+            result = data;
+            showAlert("Scheme updated successfully!", "success");
+          } else {
+            // Add Operation
+            const { data, error } = await supabase
+              .from('schemes')
+              .insert([schemeData])
+              .select();
+
+            if (error) throw error;
+            result = data;
+            showAlert("New scheme added successfully!", "success");
+          }
+
+          closeModal();
+          await refreshData();
+        } catch (error) {
+          console.error(error);
+          showAlert(`Error saving scheme: ${error.message}`, "error");
+        } finally {
+          submitBtn.innerText = originalBtnText;
+          submitBtn.disabled = false;
+        }
+      });
+
+      // Actions on table (Edit / Delete)
+      tableBody.addEventListener('click', async (e) => {
+        const actionBtn = e.target.closest('button');
+        if (!actionBtn) return;
+
+        const action = actionBtn.dataset.action;
+        const id = actionBtn.dataset.id;
+
+        if (action === 'edit') {
+          const scheme = allSchemes.find(s => s.id == id);
+          if (!scheme) return;
+
+          isEditMode = true;
+          modalTitle.innerText = "Edit Government Scheme";
+          
+          document.getElementById('form-scheme-id').value = scheme.id;
+          document.getElementById('form-name').value = scheme.scheme_name || '';
+          document.getElementById('form-category').value = scheme.category || '';
+          document.getElementById('form-desc').value = scheme.description || '';
+          document.getElementById('form-eligibility').value = scheme.eligibility || '';
+          document.getElementById('form-benefits').value = scheme.benefits || '';
+          document.getElementById('form-process').value = scheme.application_process || '';
+          document.getElementById('form-documents').value = scheme.required_documents || '';
+          document.getElementById('form-link').value = scheme.official_link || '';
+          document.getElementById('form-state').value = scheme.state || 'Central';
+          document.getElementById('form-lang').value = scheme.language || 'English';
+          document.getElementById('form-source-name').value = scheme.source_name || '';
+          document.getElementById('form-source-url').value = scheme.source_url || '';
+
+          document.getElementById('form-pdf-existing').innerHTML = scheme.pdf_url ? `<a href="${scheme.pdf_url}" target="_blank">View Existing PDF</a>` : '';
+          document.getElementById('form-guidelines-existing').innerHTML = scheme.guidelines_url ? `<a href="${scheme.guidelines_url}" target="_blank">View Existing Guidelines</a>` : '';
+          document.getElementById('form-notice-existing').innerHTML = scheme.notice_url ? `<a href="${scheme.notice_url}" target="_blank">View Existing Notice</a>` : '';
+          document.getElementById('form-app-form-existing').innerHTML = scheme.application_form_url ? `<a href="${scheme.application_form_url}" target="_blank">View Existing Application Form</a>` : '';
+
+          modal.classList.remove('hidden');
+        } else if (action === 'delete') {
+          if (confirm("Are you sure you want to delete this scheme? This action cannot be undone.")) {
+            try {
+              const { error } = await supabase
+                .from('schemes')
+                .delete()
+                .eq('id', id);
+
+              if (error) throw error;
+              
+              showAlert("Scheme deleted successfully.", "success");
+              await refreshData();
+            } catch (error) {
+              console.error(error);
+              showAlert(`Error deleting scheme: ${error.message}`, "error");
+            }
+          }
+        }
+      });
+
+      async function refreshData() {
+        try {
+          allSchemes = await getAllSchemes();
+          filterTableData();
+        } catch (error) {
+          console.error(error);
+          tableBody.innerHTML = `<tr><td colspan="7" class="text-center text-error">Failed to refresh data.</td></tr>`;
+        }
+      }
+
+      function filterTableData() {
+        const searchVal = searchInput.value.toLowerCase().trim();
+        const categoryVal = filterCategory.value;
+        const stateVal = filterState.value;
+
+        let filtered = allSchemes;
+
+        if (searchVal) {
+          filtered = filtered.filter(s => s.scheme_name.toLowerCase().includes(searchVal));
+        }
+
+        if (categoryVal !== 'All') {
+          filtered = filtered.filter(s => s.category.toLowerCase() === categoryVal.toLowerCase());
+        }
+
+        if (stateVal !== 'All') {
+          filtered = filtered.filter(s => s.state.toLowerCase() === stateVal.toLowerCase());
+        }
+
+        renderTable(filtered);
+      }
+
+      function renderTable(schemes) {
+        tableBody.innerHTML = '';
+        
+        if (schemes.length === 0) {
+          tableBody.innerHTML = `<tr><td colspan="7" class="text-center">No matching scheme records found.</td></tr>`;
+          return;
+        }
+
+        schemes.forEach(s => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td><strong>#${s.id}</strong></td>
+            <td><strong>${s.scheme_name}</strong></td>
+            <td><span class="category-badge badge-${s.category.toLowerCase().replace(/\s+/g, '-')}">${s.category}</span></td>
+            <td>${s.state}</td>
+            <td>${s.language}</td>
+            <td>
+              ${s.source_url ? `<a href="${s.source_url}" target="_blank" class="table-link">${s.source_name || 'Link'} <i class="fa-solid fa-up-right-from-square"></i></a>` : (s.source_name || 'N/A')}
+            </td>
+            <td>
+              <div class="action-buttons-cell">
+                <button class="btn btn-secondary btn-sm btn-icon" data-action="edit" data-id="${s.id}" title="Edit Scheme">
+                  <i class="fa-solid fa-pen-to-square"></i>
+                </button>
+                <button class="btn btn-danger btn-sm btn-icon" data-action="delete" data-id="${s.id}" title="Delete Scheme">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+              </div>
+            </td>
+          `;
+          tableBody.appendChild(row);
+        });
+      }
+
+      // --- Tabs Logic ---
+      const tabSchemesBtn = document.getElementById('tab-btn-schemes');
+      const tabUsersBtn = document.getElementById('tab-btn-users');
+      const tabAiBtn = document.getElementById('tab-btn-ai');
+      const tabContentSchemes = document.getElementById('tab-content-schemes');
+      const tabContentUsers = document.getElementById('tab-content-users');
+      const tabContentAi = document.getElementById('tab-content-ai');
+      const btnOpenAddModal = document.getElementById('btn-open-add-modal');
+      const usersTableBody = document.getElementById('admin-users-table-body');
+      
+      const resetTabs = () => {
+        [tabSchemesBtn, tabUsersBtn, tabAiBtn].forEach(btn => {
+          btn.classList.remove('active');
+          btn.style.borderBottom = 'none';
+          btn.style.color = 'var(--text-color)';
+        });
+        tabContentSchemes.style.display = 'none';
+        tabContentUsers.style.display = 'none';
+        tabContentAi.style.display = 'none';
+        btnOpenAddModal.style.display = 'none';
+      };
+
+      tabSchemesBtn.addEventListener('click', () => {
+        resetTabs();
+        tabSchemesBtn.classList.add('active');
+        tabSchemesBtn.style.borderBottom = '2px solid var(--accent)';
+        tabSchemesBtn.style.color = 'var(--accent)';
+        tabContentSchemes.style.display = 'block';
+        btnOpenAddModal.style.display = 'inline-block';
+      });
+
+      tabUsersBtn.addEventListener('click', async () => {
+        resetTabs();
+        tabUsersBtn.classList.add('active');
+        tabUsersBtn.style.borderBottom = '2px solid var(--accent)';
+        tabUsersBtn.style.color = 'var(--accent)';
+        tabContentUsers.style.display = 'block';
+        await fetchAndRenderUsers();
+      });
+
+      tabAiBtn.addEventListener('click', async () => {
+        resetTabs();
+        tabAiBtn.classList.add('active');
+        tabAiBtn.style.borderBottom = '2px solid var(--accent)';
+        tabAiBtn.style.color = 'var(--accent)';
+        tabContentAi.style.display = 'block';
+        await fetchAiSettings();
+      });
+
+      // AI Settings Logic
+      async function fetchAiSettings() {
+        try {
+          const { data, error } = await supabase.from('ai_settings').select('*').eq('id', 1).single();
+          if (error) throw error;
+          if (data) {
+            document.getElementById('ai-gemini-model').value = data.gemini_model;
+            document.getElementById('ai-response-length').value = data.response_length;
+            document.getElementById('ai-tamil-mode').value = data.tamil_prompt_mode;
+            document.getElementById('ai-english-mode').value = data.english_prompt_mode;
+          }
+          
+          const savedKey = localStorage.getItem('GEMINI_API_KEY') || (data && data.gemini_api_key);
+          if (savedKey) {
+             document.getElementById('ai-api-key').placeholder = "•••••••••••••••••••••••• (Saved)";
+          }
+        } catch (err) {
+          console.error("Failed to fetch AI Settings:", err);
+          showAlert("Failed to load AI settings.", "error");
+        }
+      }
+
+      document.getElementById('ai-settings-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('btn-save-ai-settings');
+        btn.innerText = "Saving...";
+        btn.disabled = true;
+
+        const newSettings = {
+          gemini_model: document.getElementById('ai-gemini-model').value,
+          response_length: document.getElementById('ai-response-length').value,
+          tamil_prompt_mode: document.getElementById('ai-tamil-mode').value,
+          english_prompt_mode: document.getElementById('ai-english-mode').value
+        };
+
+        const apiKeyInput = document.getElementById('ai-api-key').value.trim();
+        if (apiKeyInput) {
+           localStorage.setItem('GEMINI_API_KEY', apiKeyInput);
+        }
+
+        try {
+          const { error } = await supabase.from('ai_settings').update(newSettings).eq('id', 1);
+          if (error) throw error;
+          showAlert("AI Settings saved successfully!", "success");
+        } catch (err) {
+          console.error(err);
+          showAlert("Failed to save AI settings.", "error");
+        } finally {
+          btn.innerText = "Save AI Settings";
+          btn.disabled = false;
+        }
+      });
+
+      async function fetchAndRenderUsers() {
+        try {
+          usersTableBody.innerHTML = `<tr><td colspan="8" class="text-center">Loading registered users...</td></tr>`;
+          const { data: users, error } = await supabase
+            .from('user_profiles')
+            .select('*')
+            .order('created_at', { ascending: false });
+            
+          if (error) throw error;
+          
+          if (!users || users.length === 0) {
+            usersTableBody.innerHTML = `<tr><td colspan="8" class="text-center">No registered users found.</td></tr>`;
+            return;
+          }
+          
+          usersTableBody.innerHTML = '';
+          users.forEach(u => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td><strong>#${u.id}</strong></td>
+              <td><strong>${u.name || 'N/A'}</strong></td>
+              <td>${u.email}</td>
+              <td>${u.age || '-'}</td>
+              <td>${u.gender || '-'}</td>
+              <td>${u.state || '-'}</td>
+              <td>${u.education || '-'}</td>
+              <td><span class="category-badge badge-startup">${u.occupation || '-'}</span></td>
+            `;
+            usersTableBody.appendChild(row);
+          });
+        } catch (err) {
+          console.error(err);
+          usersTableBody.innerHTML = `<tr><td colspan="8" class="text-center text-error">Failed to load users: ${err.message}</td></tr>`;
+        }
+      }
+      // -----------------
+
+      function showAlert(message, type) {
+        alertBanner.innerText = message;
+        alertBanner.className = `admin-alert alert-${type}`;
+        alertBanner.classList.remove('hidden');
+        
+        setTimeout(() => {
+          alertBanner.classList.add('hidden');
+        }, 5000);
+      }
+
+      function debounce(func, delay) {
+        let timer;
+        return function (...args) {
+          clearTimeout(timer);
+          timer = setTimeout(() => func.apply(this, args), delay);
+        };
+      }
+    });
+  </script>
+  <!-- Google Translate -->
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'en,ta', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
+    }
+  </script>
+  <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>

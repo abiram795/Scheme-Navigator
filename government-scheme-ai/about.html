@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us - Government Scheme Navigator AI</title>
+  <meta name="description" content="Learn more about Government Scheme Navigator AI, our goals, technology stack, and team.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="light-theme">
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="home.html" class="nav-logo">
+        <img src="assets/logo.png" alt="Gov Scheme AI Logo" id="logo-img">
+        <span class="logo-text">Scheme<span>Navigator</span></span>
+      </a>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle Menu">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <nav class="nav-menu" id="nav-menu">
+        <a href="home.html" class="nav-link">Home</a>
+        <a href="schemes.html" class="nav-link">Schemes</a>
+        <a href="chatbot.html" class="nav-link">Ask AI Chatbot</a>
+        <a href="about.html" class="nav-link active">About</a>
+        <a href="#" id="nav-logout" class="nav-link"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+        <div id="google_translate_element" style="display:inline-block;"></div>
+        <button id="theme-toggle" class="theme-btn" aria-label="Toggle Theme">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- About Content -->
+  <main class="about-container section-container">
+    <div class="about-hero glass-card">
+      <h1>About Government Scheme Navigator AI</h1>
+      <p>Empowering citizens and students to easily locate, learn about, and apply for government welfare initiatives.</p>
+    </div>
+
+    <section class="about-grid">
+      <div class="about-card glass-card">
+        <h2><i class="fa-solid fa-bullseye"></i> Our Mission</h2>
+        <p>Many eligible citizens and students miss out on government schemes, subsidies, and scholarships due to complex portals, search friction, and language barriers. Our mission is to bridge this information gap by offering an intelligent, multi-lingual, and conversation-driven Navigator that resolves citizen profile requirements instantly.</p>
+      </div>
+
+      <div class="about-card glass-card">
+        <h2><i class="fa-solid fa-microchip"></i> Technology Stack</h2>
+        <p>The Government Scheme Navigator AI is constructed using state-of-the-art serverless technologies:</p>
+        <ul class="tech-list">
+          <li><strong>Frontend:</strong> Responsive HTML5, Vanilla CSS3 with Glassmorphism styles, and ES6 JavaScript.</li>
+          <li><strong>Database:</strong> Supabase (PostgreSQL) for scheme catalog caching, profiles, and chat log storage.</li>
+          <li><strong>AI Engine:</strong> Google Gemini 1.5 Flash accessed via secure serverless proxy to parse intents and generate natural language recommendations.</li>
+          <li><strong>Hosting:</strong> Netlify deployment with Serverless API functions to safeguard API credentials.</li>
+        </ul>
+      </div>
+
+      <div class="about-card glass-card">
+        <h2><i class="fa-solid fa-shield-check"></i> Key Features</h2>
+        <ul class="features-bullet-list">
+          <li><i class="fa-solid fa-check"></i> <strong>Natural Language Chat:</strong> Engage with the chatbot as if talking to a helper.</li>
+          <li><i class="fa-solid fa-check"></i> <strong>Bilingual Capability:</strong> Automatically detects English and Tamil queries, responding back in the corresponding language.</li>
+          <li><i class="fa-solid fa-check"></i> <strong>Smart Onboarding Profile:</strong> Tailors recommendations automatically based on Name, Age, State, and Occupation.</li>
+          <li><i class="fa-solid fa-check"></i> <strong>Official Links & Sources:</strong> Displays verifying sources and links directly for authenticity.</li>
+          <li><i class="fa-solid fa-check"></i> <strong>Admin Dashboard:</strong> Direct CRUD capabilities to add, edit, or delete schemes instantly from the portal.</li>
+        </ul>
+      </div>
+
+      <div class="about-card glass-card">
+        <h2><i class="fa-solid fa-road"></i> Future Map</h2>
+        <p>We plan to integrate <strong>Supabase pgvector</strong> in the next release to enable AI-powered semantic similarity search, expanding scheme discovery to match conceptual matches rather than strict keyword combinations. Additionally, we aim to implement push notifications for schemes matching user profiles as they get added.</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <a href="home.html" class="footer-logo">
+          <span class="logo-text">Scheme<span>Navigator</span></span>
+        </a>
+        <p>An intelligent web portal enabling students and citizens to navigate the ecosystem of Indian government welfare programs.</p>
+        <div class="social-links">
+          <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fa-brands fa-twitter"></i></a>
+          <a href="#" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="home.html">Home</a></li>
+          <li><a href="schemes.html">Browse Schemes</a></li>
+          <li><a href="chatbot.html">AI Chatbot</a></li>
+          <li><a href="about.html">About Project</a></li>
+        </ul>
+      </div>
+      <div class="footer-contact">
+        <h4>Disclaimer</h4>
+        <p>This is an AI-powered assistant designed for informational purposes. Users are advised to double-check detailed rules on the official links provided for each scheme before applying.</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Government Scheme Navigator AI. Built with Vanilla JS & Supabase.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/app.js"></script>
+  <!-- Google Translate -->
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'en,ta', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
+    }
+  </script>
+  <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>

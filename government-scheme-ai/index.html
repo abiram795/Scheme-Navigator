@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Government Scheme Navigator AI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .auth-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: var(--bg-color);
+      padding: 1rem;
+    }
+    .auth-card {
+      width: 100%;
+      max-width: 500px;
+      padding: 2rem;
+    }
+    .auth-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .auth-toggle {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .auth-toggle button {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 1.1rem;
+      cursor: pointer;
+      padding-bottom: 0.5rem;
+    }
+    .auth-toggle button.active {
+      color: var(--primary);
+      border-bottom: 2px solid var(--primary);
+    }
+  </style>
+</head>
+<body class="light-theme">
+  <div class="auth-container">
+    <div class="auth-card glass-card">
+      <div class="auth-header">
+        <div id="google_translate_element" style="display:inline-block; position:absolute; top:1rem; right:1rem;"></div>
+        <img src="assets/logo.png" alt="Logo" style="height: 60px; margin-bottom: 1rem;">
+        <h2>Welcome to Scheme Navigator</h2>
+        <p class="text-muted">Discover the right schemes for you.</p>
+      </div>
+      
+      <div class="auth-toggle">
+        <button id="tab-login" class="active">Login</button>
+        <button id="tab-register">Register</button>
+      </div>
+
+      <div id="auth-alert" class="admin-alert hidden" style="margin-bottom: 1rem;"></div>
+
+      <!-- Login Form -->
+      <form id="login-form">
+        <div class="form-group">
+          <label for="login-email">Email</label>
+          <input type="email" id="login-email" required placeholder="your@email.com">
+        </div>
+        <div class="form-group">
+          <label for="login-password">Password</label>
+          <input type="password" id="login-password" required placeholder="Enter password">
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;" id="btn-login">Login</button>
+      </form>
+
+      <!-- Register Form -->
+      <form id="register-form" style="display: none;">
+        <div class="form-group">
+          <label for="reg-email">Email *</label>
+          <input type="email" id="reg-email" required placeholder="your@email.com">
+        </div>
+        <div class="form-group">
+          <label for="reg-password">Password *</label>
+          <input type="password" id="reg-password" required placeholder="Create password">
+        </div>
+        <div class="form-group">
+          <label for="reg-name">Full Name *</label>
+          <input type="text" id="reg-name" required placeholder="John Doe">
+        </div>
+        <div class="form-row">
+          <div class="form-group flex-2">
+            <label for="reg-age">Age</label>
+            <input type="number" id="reg-age" placeholder="25">
+          </div>
+          <div class="form-group flex-2">
+            <label for="reg-gender">Gender</label>
+            <select id="reg-gender">
+              <option value="" disabled selected>Select</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group flex-2">
+            <label for="reg-state">State</label>
+            <input type="text" id="reg-state" placeholder="e.g. Tamil Nadu">
+          </div>
+          <div class="form-group flex-2">
+            <label for="reg-occupation">Occupation</label>
+            <input type="text" id="reg-occupation" placeholder="e.g. Student, Farmer">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="reg-education">Education Level</label>
+          <select id="reg-education">
+            <option value="" disabled selected>Select Education</option>
+            <option value="High School">High School</option>
+            <option value="Undergraduate">Undergraduate</option>
+            <option value="Postgraduate">Postgraduate</option>
+            <option value="Doctorate">Doctorate</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;" id="btn-register">Create Account</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // If already logged in, redirect to home
+      if (sessionStorage.getItem('user_authenticated') === 'true') {
+        window.location.href = 'home.html';
+      }
+
+      const tabLogin = document.getElementById('tab-login');
+      const tabRegister = document.getElementById('tab-register');
+      const loginForm = document.getElementById('login-form');
+      const registerForm = document.getElementById('register-form');
+      const authAlert = document.getElementById('auth-alert');
+
+      tabLogin.addEventListener('click', () => {
+        tabLogin.classList.add('active');
+        tabRegister.classList.remove('active');
+        loginForm.style.display = 'block';
+        registerForm.style.display = 'none';
+        authAlert.classList.add('hidden');
+      });
+
+      tabRegister.addEventListener('click', () => {
+        tabRegister.classList.add('active');
+        tabLogin.classList.remove('active');
+        registerForm.style.display = 'block';
+        loginForm.style.display = 'none';
+        authAlert.classList.add('hidden');
+      });
+
+      function showAlert(msg, type) {
+        authAlert.innerText = msg;
+        authAlert.className = `admin-alert alert-${type}`;
+        authAlert.classList.remove('hidden');
+      }
+
+      loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
+        const btn = document.getElementById('btn-login');
+        
+        try {
+          btn.innerText = 'Logging in...';
+          
+          // 1. Check if it's an admin login
+          const { data: adminData, error: adminError } = await supabase
+            .from('admins')
+            .select('id')
+            .eq('email', email)
+            .eq('password_hash', password)
+            .single();
+            
+          if (!adminError && adminData) {
+            sessionStorage.setItem('admin_authenticated', 'true');
+            window.location.href = 'admin.html';
+            return;
+          }
+
+          // 2. If not admin, check regular user profiles
+          const { data, error } = await supabase
+            .from('user_profiles')
+            .select('id, name')
+            .eq('email', email)
+            .eq('password_hash', password)
+            .single();
+
+          if (error || !data) {
+            showAlert('Invalid email or password.', 'error');
+            btn.innerText = 'Login';
+          } else {
+            sessionStorage.setItem('user_authenticated', 'true');
+            sessionStorage.setItem('user_profile_id', data.id);
+            sessionStorage.setItem('user_name', data.name || 'User');
+            window.location.href = 'home.html';
+          }
+        } catch (err) {
+          showAlert('An error occurred.', 'error');
+          btn.innerText = 'Login';
+        }
+      });
+
+      registerForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('btn-register');
+        
+        const userData = {
+          email: document.getElementById('reg-email').value,
+          password_hash: document.getElementById('reg-password').value,
+          name: document.getElementById('reg-name').value,
+          age: parseInt(document.getElementById('reg-age').value) || null,
+          gender: document.getElementById('reg-gender').value,
+          state: document.getElementById('reg-state').value,
+          occupation: document.getElementById('reg-occupation').value,
+          education: document.getElementById('reg-education').value
+        };
+
+        try {
+          btn.innerText = 'Creating account...';
+          const { data, error } = await supabase
+            .from('user_profiles')
+            .insert([userData])
+            .select();
+
+          if (error) {
+            if (error.code === '23505') {
+              showAlert('Email is already registered.', 'error');
+            } else {
+              showAlert('Registration failed: ' + error.message, 'error');
+            }
+            btn.innerText = 'Create Account';
+          } else {
+            const newUser = data[0];
+            sessionStorage.setItem('user_authenticated', 'true');
+            sessionStorage.setItem('user_profile_id', newUser.id);
+            sessionStorage.setItem('user_name', newUser.name);
+            window.location.href = 'home.html';
+          }
+        } catch (err) {
+          showAlert('An error occurred.', 'error');
+          btn.innerText = 'Create Account';
+        }
+      });
+    });
+  </script>
+  <!-- Google Translate -->
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'en,ta', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
+    }
+  </script>
+  <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Government Scheme Navigator AI - Discover Schemes Easily</title>
+  <meta name="description" content="Find and check your eligibility for various central and state government schemes in India. Empowering citizens through AI-driven navigation.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="light-theme">
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="home.html" class="nav-logo">
+        <img src="assets/logo.png" alt="Gov Scheme AI Logo" id="logo-img">
+        <span class="logo-text">Scheme<span>Navigator</span></span>
+      </a>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle Menu">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <nav class="nav-menu" id="nav-menu">
+        <a href="home.html" class="nav-link active">Home</a>
+        <a href="schemes.html" class="nav-link">Schemes</a>
+        <a href="chatbot.html" class="nav-link">Ask AI Chatbot</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="#" id="nav-logout" class="nav-link"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+        <div id="google_translate_element" style="display:inline-block;"></div>
+        <button id="theme-toggle" class="theme-btn" aria-label="Toggle Theme">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-container">
+      <div class="hero-content">
+        <span class="badge">AI-Powered Assistance</span>
+        <h1>Empowering Citizens to Discover <span class="gradient-text">Government Schemes</span></h1>
+        <p>Navigate and search through central and state-level government benefits. Use our smart AI chatbot to find eligibility, benefits, and application guidelines in English and Tamil.</p>
+        <div class="hero-buttons">
+          <a href="chatbot.html" class="btn btn-primary"><i class="fa-solid fa-comments"></i> Ask Scheme AI</a>
+          <a href="schemes.html" class="btn btn-secondary">Browse Schemes</a>
+        </div>
+      </div>
+      <div class="hero-image-wrapper">
+        <img src="assets/hero-image.png" alt="Government Scheme AI Navigator" class="hero-illustration">
+        <div class="glass-card stat-card-floating">
+          <i class="fa-solid fa-circle-check"></i>
+          <div>
+            <h4>Verified Info</h4>
+            <p>Direct official sources</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Search Section -->
+  <section class="search-section">
+    <div class="section-container">
+      <div class="search-bar-container glass-card">
+        <form id="hero-search-form" action="schemes.html" method="GET">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input type="text" name="search" placeholder="Search schemes e.g., 'Engineering scholarship', 'Farmer subsidy'..." required>
+          <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Popular Categories Section -->
+  <section class="categories-section">
+    <div class="section-container">
+      <div class="section-header">
+        <h2>Popular Categories</h2>
+        <p>Explore government schemes tailored to your specific group or need</p>
+      </div>
+      <div class="categories-grid">
+        <a href="schemes.html?category=Student" class="category-card glass-card">
+          <div class="category-icon bg-student"><i class="fa-solid fa-graduation-cap"></i></div>
+          <h3>Student</h3>
+          <p>Scholarships, education benefits, and loan waivers.</p>
+        </a>
+        <a href="schemes.html?category=Farmer" class="category-card glass-card">
+          <div class="category-icon bg-farmer"><i class="fa-solid fa-tractor"></i></div>
+          <h3>Farmer</h3>
+          <p>Subsidies, income support, and equipment schemes.</p>
+        </a>
+        <a href="schemes.html?category=Women" class="category-card glass-card">
+          <div class="category-icon bg-women"><i class="fa-solid fa-person-dress"></i></div>
+          <h3>Women</h3>
+          <p>Savings plans, maternity assistance, and empowerment.</p>
+        </a>
+        <a href="schemes.html?category=Senior Citizen" class="category-card glass-card">
+          <div class="category-icon bg-senior"><i class="fa-solid fa-person-cane"></i></div>
+          <h3>Senior Citizen</h3>
+          <p>Pensions, retirement plans, and healthcare benefits.</p>
+        </a>
+        <a href="schemes.html?category=Startup" class="category-card glass-card">
+          <div class="category-icon bg-startup"><i class="fa-solid fa-lightbulb"></i></div>
+          <h3>Startup</h3>
+          <p>Funding opportunities, incubation, and business loans.</p>
+        </a>
+        <a href="schemes.html?category=Employment" class="category-card glass-card">
+          <div class="category-icon bg-employment"><i class="fa-solid fa-briefcase"></i></div>
+          <h3>Employment</h3>
+          <p>Job training, self-employment support, and credit schemes.</p>
+        </a>
+        <a href="schemes.html?category=Education" class="category-card glass-card">
+          <div class="category-icon bg-education"><i class="fa-solid fa-book-open"></i></div>
+          <h3>Education</h3>
+          <p>General educational aids and school support.</p>
+        </a>
+        <a href="schemes.html?category=Health" class="category-card glass-card">
+          <div class="category-icon bg-health"><i class="fa-solid fa-heart-pulse"></i></div>
+          <h3>Health</h3>
+          <p>Cashless treatments, medical cards, and maternity health.</p>
+        </a>
+        <a href="schemes.html?category=Disability Support" class="category-card glass-card">
+          <div class="category-icon bg-disability"><i class="fa-solid fa-wheelchair"></i></div>
+          <h3>Disability Support</h3>
+          <p>Maintenance allowances, equipment, and travel concessions.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Statistics Section -->
+  <section class="statistics-section">
+    <div class="section-container grid-stats">
+      <div class="stat-item">
+        <h3 class="stat-number" data-target="30">30+</h3>
+        <p>Active Schemes Indexed</p>
+      </div>
+      <div class="stat-item">
+        <h3 class="stat-number">2</h3>
+        <p>Languages (English & Tamil)</p>
+      </div>
+      <div class="stat-item">
+        <h3 class="stat-number">28</h3>
+        <p>States & Union Territories</p>
+      </div>
+      <div class="stat-item">
+        <h3 class="stat-number">100%</h3>
+        <p>Verified Source Verification</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features-section">
+    <div class="section-container">
+      <div class="section-header">
+        <h2>Features & Benefits</h2>
+        <p>Why use the Scheme Navigator AI platform?</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-item glass-card">
+          <div class="feature-icon"><i class="fa-solid fa-robot"></i></div>
+          <h3>AI Chatbot Recommendation</h3>
+          <p>Receive conversational replies that detail eligibility and guide application workflows using Google Gemini.</p>
+        </div>
+        <div class="feature-item glass-card">
+          <div class="feature-icon"><i class="fa-solid fa-language"></i></div>
+          <h3>Bilingual Support</h3>
+          <p>Ask in English or Tamil. The AI detects the language automatically and responds in kind.</p>
+        </div>
+        <div class="feature-item glass-card">
+          <div class="feature-icon"><i class="fa-solid fa-shield-halved"></i></div>
+          <h3>Source Verified Info</h3>
+          <p>Every scheme is backed by official government portals and links, ensuring zero misinformation.</p>
+        </div>
+        <div class="feature-item glass-card">
+          <div class="feature-icon"><i class="fa-solid fa-user-gear"></i></div>
+          <h3>Tailored Results</h3>
+          <p>Enter your profile (age, gender, state, education) to discover custom-fit scheme options instantaneously.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <a href="home.html" class="footer-logo">
+          <span class="logo-text">Scheme<span>Navigator</span></span>
+        </a>
+        <p>An intelligent web portal enabling students and citizens to navigate the ecosystem of Indian government welfare programs.</p>
+        <div class="social-links">
+          <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fa-brands fa-twitter"></i></a>
+          <a href="#" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="home.html">Home</a></li>
+          <li><a href="schemes.html">Browse Schemes</a></li>
+          <li><a href="chatbot.html">AI Chatbot</a></li>
+          <li><a href="about.html">About Project</a></li>
+        </ul>
+      </div>
+      <div class="footer-contact">
+        <h4>Disclaimer</h4>
+        <p>This is an AI-powered assistant designed for informational purposes. Users are advised to double-check detailed rules on the official links provided for each scheme before applying.</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Government Scheme Navigator AI. Built with Vanilla JS & Supabase.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/app.js">  </script>
+  <!-- Google Translate -->
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'en,ta', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
+    }
+  </script>
+  <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>

@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Government Schemes Directory - Scheme Navigator AI</title>
+  <meta name="description" content="Explore, search, and filter through the complete repository of Central and state government welfare schemes in India.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="light-theme">
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="home.html" class="nav-logo">
+        <img src="assets/logo.png" alt="Gov Scheme AI Logo" id="logo-img">
+        <span class="logo-text">Scheme<span>Navigator</span></span>
+      </a>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle Menu">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <nav class="nav-menu" id="nav-menu">
+        <a href="home.html" class="nav-link">Home</a>
+        <a href="schemes.html" class="nav-link active">Schemes</a>
+        <a href="chatbot.html" class="nav-link">Ask AI Chatbot</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="#" id="nav-logout" class="nav-link"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+        <div id="google_translate_element" style="display:inline-block;"></div>
+        <button id="theme-toggle" class="theme-btn" aria-label="Toggle Theme">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Directory Container -->
+  <main class="directory-container section-container">
+    <div class="directory-header">
+      <h1>Government Schemes Directory</h1>
+      <p>Search, filter, and review details of official welfare schemes.</p>
+    </div>
+
+    <!-- Search & Filter Controls -->
+    <section class="filter-controls-card glass-card">
+      <div class="search-box-row">
+        <div class="search-input-wrapper">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="scheme-search-input" placeholder="Search schemes by name, keyword, or description...">
+        </div>
+      </div>
+      
+      <div class="filters-row">
+        <div class="filter-group">
+          <label for="filter-category"><i class="fa-solid fa-tags"></i> Category</label>
+          <select id="filter-category">
+            <option value="All">All Categories</option>
+            <option value="Student">Student</option>
+            <option value="Farmer">Farmer</option>
+            <option value="Women">Women</option>
+            <option value="Senior Citizen">Senior Citizen</option>
+            <option value="Startup">Startup</option>
+            <option value="Employment">Employment</option>
+            <option value="Education">Education</option>
+            <option value="Health">Health</option>
+            <option value="Disability Support">Disability Support</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="filter-state"><i class="fa-solid fa-map-location-dot"></i> State / Region</label>
+          <select id="filter-state">
+            <option value="All">All Regions</option>
+            <option value="Central">Central (National)</option>
+            <option value="Tamil Nadu">Tamil Nadu</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="filter-language"><i class="fa-solid fa-language"></i> Language</label>
+          <select id="filter-language">
+            <option value="All">All Languages</option>
+            <option value="English">English</option>
+            <option value="Tamil">Tamil</option>
+          </select>
+        </div>
+
+        <button class="btn btn-secondary reset-filters-btn" id="btn-reset-filters">
+          <i class="fa-solid fa-rotate-left"></i> Reset
+        </button>
+      </div>
+    </section>
+
+    <!-- Schemes Count -->
+    <div class="schemes-meta-row">
+      <p id="schemes-count-text">Loading schemes...</p>
+    </div>
+
+    <!-- Schemes Grid -->
+    <section class="schemes-grid" id="schemes-grid">
+      <!-- Loading Skeleton Cards -->
+      <div class="skeleton-card glass-card"></div>
+      <div class="skeleton-card glass-card"></div>
+      <div class="skeleton-card glass-card"></div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <a href="home.html" class="footer-logo">
+          <span class="logo-text">Scheme<span>Navigator</span></span>
+        </a>
+        <p>An intelligent web portal enabling students and citizens to navigate the ecosystem of Indian government welfare programs.</p>
+        <div class="social-links">
+          <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fa-brands fa-twitter"></i></a>
+          <a href="#" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="home.html">Home</a></li>
+          <li><a href="schemes.html">Browse Schemes</a></li>
+          <li><a href="chatbot.html">AI Chatbot</a></li>
+          <li><a href="about.html">About Project</a></li>
+        </ul>
+      </div>
+      <div class="footer-contact">
+        <h4>Disclaimer</h4>
+        <p>This is an AI-powered assistant designed for informational purposes. Users are advised to double-check detailed rules on the official links provided for each scheme before applying.</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Government Scheme Navigator AI. Built with Vanilla JS & Supabase.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/app.js"></script>
+  <!-- Load Supabase SDK from CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
+  
+  <!-- Client Side directory renderer -->
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Parse parameters from query URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const catParam = urlParams.get('category');
+      const searchParam = urlParams.get('search');
+
+      const searchInput = document.getElementById('scheme-search-input');
+      const filterCategory = document.getElementById('filter-category');
+      const filterState = document.getElementById('filter-state');
+      const filterLanguage = document.getElementById('filter-language');
+      const resetBtn = document.getElementById('btn-reset-filters');
+      const schemesGrid = document.getElementById('schemes-grid');
+      const countText = document.getElementById('schemes-count-text');
+
+      if (catParam) {
+        filterCategory.value = catParam;
+      }
+      if (searchParam) {
+        searchInput.value = searchParam;
+      }
+
+      // Initial rendering
+      await loadAndRenderSchemes();
+
+      // Setup Event Listeners
+      searchInput.addEventListener('input', debounce(loadAndRenderSchemes, 300));
+      filterCategory.addEventListener('change', loadAndRenderSchemes);
+      filterState.addEventListener('change', loadAndRenderSchemes);
+      filterLanguage.addEventListener('change', loadAndRenderSchemes);
+
+      resetBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        filterCategory.value = 'All';
+        filterState.value = 'All';
+        filterLanguage.value = 'All';
+        loadAndRenderSchemes();
+      });
+
+      async function loadAndRenderSchemes() {
+        showSkeletons();
+        
+        const searchVal = searchInput.value.trim();
+        const categoryVal = filterCategory.value;
+        const stateVal = filterState.value;
+        const languageVal = filterLanguage.value;
+
+        try {
+          let schemes = [];
+          if (!window.supabaseClientReady) {
+            countText.innerHTML = `<span style="color:var(--accent);">Database not connected. Please set up Supabase URL and Key in configuration.</span>`;
+            schemesGrid.innerHTML = `
+              <div class="no-results-card glass-card">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <h3>Supabase Configuration Missing</h3>
+                <p>Ensure SUPABASE_URL and SUPABASE_ANON_KEY are set up in your local configuration or netlify environment variables.</p>
+              </div>`;
+            return;
+          }
+
+          // Call Supabase operations
+          if (searchVal) {
+            schemes = await searchSchemes(searchVal);
+          } else {
+            schemes = await getAllSchemes();
+          }
+
+          // Apply filters locally for composite UI filtering
+          let filtered = schemes;
+          if (categoryVal !== 'All') {
+            filtered = filtered.filter(s => s.category.toLowerCase() === categoryVal.toLowerCase());
+          }
+          if (stateVal !== 'All') {
+            filtered = filtered.filter(s => s.state.toLowerCase() === stateVal.toLowerCase());
+          }
+          if (languageVal !== 'All') {
+            filtered = filtered.filter(s => s.language.toLowerCase() === languageVal.toLowerCase());
+          }
+
+          renderCards(filtered);
+        } catch (error) {
+          console.error(error);
+          schemesGrid.innerHTML = `
+            <div class="no-results-card glass-card">
+              <i class="fa-solid fa-face-frown"></i>
+              <h3>Error loading schemes</h3>
+              <p>Failed to retrieve records from database. Check console logs.</p>
+            </div>`;
+          countText.innerText = "Error loading schemes.";
+        }
+      }
+
+      function renderCards(schemes) {
+        schemesGrid.innerHTML = '';
+        countText.innerText = `Found ${schemes.length} scheme${schemes.length === 1 ? '' : 's'}`;
+
+        if (schemes.length === 0) {
+          schemesGrid.innerHTML = `
+            <div class="no-results-card glass-card">
+              <i class="fa-solid fa-folder-open"></i>
+              <h3>No Schemes Found</h3>
+              <p>Try refining your search text or removing filter parameters.</p>
+            </div>`;
+          return;
+        }
+
+        schemes.forEach(s => {
+          const card = document.createElement('div');
+          card.className = 'scheme-card glass-card';
+          
+          card.innerHTML = `
+            <div class="card-badge-row">
+              <span class="category-badge badge-${s.category.toLowerCase().replace(/\s+/g, '-')}">${s.category}</span>
+              <span class="state-badge">${s.state}</span>
+            </div>
+            <h3>${s.scheme_name}</h3>
+            <p class="description">${s.description || 'No description available.'}</p>
+            
+            <div class="scheme-details-collapsible">
+              <div class="details-section">
+                <strong><i class="fa-solid fa-clipboard-question"></i> Eligibility:</strong>
+                <p>${s.eligibility || 'N/A'}</p>
+              </div>
+              <div class="details-section">
+                <strong><i class="fa-solid fa-award"></i> Benefits:</strong>
+                <p>${s.benefits || 'N/A'}</p>
+              </div>
+              <div class="details-section">
+                <strong><i class="fa-solid fa-gears"></i> Application Process:</strong>
+                <p>${s.application_process || 'N/A'}</p>
+              </div>
+              <div class="details-section">
+                <strong><i class="fa-solid fa-file-lines"></i> Required Documents:</strong>
+                <p>${s.required_documents || 'Not specified'}</p>
+              </div>
+
+              ${(s.pdf_url || s.guidelines_url || s.notice_url || s.application_form_url) ? `
+              <div class="details-section" style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1rem; margin-top: 1rem;">
+                <strong style="display:block; margin-bottom: 0.8rem; color: var(--accent);"><i class="fa-solid fa-download"></i> Downloadable Documents:</strong>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                  ${s.pdf_url ? `<a href="${s.pdf_url}" target="_blank" class="btn btn-secondary btn-sm"><i class="fa-solid fa-file-pdf"></i> General PDF</a>` : ''}
+                  ${s.guidelines_url ? `<a href="${s.guidelines_url}" target="_blank" class="btn btn-secondary btn-sm"><i class="fa-solid fa-book"></i> Guidelines</a>` : ''}
+                  ${s.notice_url ? `<a href="${s.notice_url}" target="_blank" class="btn btn-secondary btn-sm"><i class="fa-solid fa-bullhorn"></i> Notice</a>` : ''}
+                  ${s.application_form_url ? `<a href="${s.application_form_url}" target="_blank" class="btn btn-primary btn-sm"><i class="fa-solid fa-file-signature"></i> Application Form</a>` : ''}
+                </div>
+              </div>
+              ` : ''}
+            </div>
+
+            <div class="card-footer-row">
+              <div class="source-info">
+                <span>Source:</span>
+                ${s.source_url ? `<a href="${s.source_url}" target="_blank" rel="noopener">${s.source_name || 'Official Source'} <i class="fa-solid fa-arrow-up-right-from-square"></i></a>` : `<span>${s.source_name || 'Not specified'}</span>`}
+              </div>
+              ${s.official_link ? `<a href="${s.official_link}" target="_blank" rel="noopener" class="btn btn-secondary btn-sm">Official Link <i class="fa-solid fa-external-link"></i></a>` : ''}
+            </div>
+          `;
+          schemesGrid.appendChild(card);
+        });
+      }
+
+      function showSkeletons() {
+        schemesGrid.innerHTML = `
+          <div class="skeleton-card glass-card"></div>
+          <div class="skeleton-card glass-card"></div>
+          <div class="skeleton-card glass-card"></div>
+        `;
+      }
+
+      function debounce(func, delay) {
+        let timer;
+        return function (...args) {
+          clearTimeout(timer);
+          timer = setTimeout(() => func.apply(this, args), delay);
+        };
+      }
+    });
+  </script>
+  <!-- Google Translate -->
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'en,ta', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
+    }
+  </script>
+  <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>
